@@ -10,7 +10,9 @@
         {
             List<string> availableMoves = g.CalculateLegalMoves();
             int randomIndex = r.Next(0,availableMoves.Count);
-            return g.ExecuteCmd(availableMoves[randomIndex]);
+            string cmd = availableMoves[randomIndex];
+            Console.WriteLine($"{name}: {cmd}");
+            return g.ExecuteCmd(cmd);
         }
     }
 }

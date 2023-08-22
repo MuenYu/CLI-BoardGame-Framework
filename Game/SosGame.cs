@@ -5,9 +5,9 @@
         protected int[] scores;
         public int[] Scores { get { return scores; } }
 
-        protected int row;
-        protected int col;
-        protected string sign;
+        protected int curPieceRow;
+        protected int curPieceCol;
+        protected string curPieceSign;
 
         public SosGame(Board board, Player[] players, int curPlayer, HelpSystem helpSystem, HistoryManager historyManager, GameSaver gameSaver, int[] scores) 
             : base(board, players, curPlayer, helpSystem, historyManager, gameSaver)
@@ -51,14 +51,14 @@
         {
             if (!CheckAndParseCmd(cmd)) return false;
             // put the piece on the board
-            Board.Cells[row][col] = new Piece(sign);
+            Board.Cells[curPieceRow][curPieceCol] = new Piece(curPieceSign);
             return CheckScoring();
         }
 
         public bool CheckScoring()
         {
             int score = 0 ;
-            switch (sign)
+            switch (curPieceSign)
             {
                 case "S":
                     score = CheckScore4S();
@@ -83,10 +83,10 @@
             for (int i = 0; i < dr.Length; ++i)
             {
                 // coord starts from 1, so minus 1
-                int p1Row = row + dr[i];
-                int p2Row = row + 2 * dr[i];
-                int p1Col = col + dc[i];
-                int p2Col = col + 2 * dc[i];
+                int p1Row = curPieceRow + dr[i];
+                int p2Row = curPieceRow + 2 * dr[i];
+                int p1Col = curPieceCol + dc[i];
+                int p2Col = curPieceCol + 2 * dc[i];
                 // check whether p2 is on the board
                 if (Board.IsValidCoord(p2Row,p2Col)) // if p2 is on the board
                 {
@@ -111,10 +111,10 @@
             int[] dc = new int[] {0, 1, 1, 1 };
             for (int i = 0; i < dr.Length; ++i)
             {
-                int p1Row = row + dr[i];
-                int p2Row = row - dr[i];
-                int p1Col = col + dc[i];
-                int p2Col = col - dc[i];
+                int p1Row = curPieceRow + dr[i];
+                int p2Row = curPieceRow - dr[i];
+                int p1Col = curPieceCol + dc[i];
+                int p2Col = curPieceCol - dc[i];
                 // check if p1 and p2 are on the board
                 if (Board.IsValidCoord(p1Row,p1Col) && Board.IsValidCoord(p2Row, p2Col))
                 {
@@ -156,16 +156,16 @@
                 // if the symbol is not s or o
                 else if (fragments[3] != "S" && fragments[3] != "O") throw new Exception($"{WrongParameter}: the third parameter must be S or O");
                 // if the second parameter is not integer
-                else if (!Int32.TryParse(fragments[1], out row)) throw new Exception($"{WrongParameter}: the first parameter must be an integer");
+                else if (!Int32.TryParse(fragments[1], out curPieceRow)) throw new Exception($"{WrongParameter}: the first parameter must be an integer");
                 // if the third parameter is not integer
-                else if (!Int32.TryParse(fragments[2], out col)) throw new Exception($"{WrongParameter}: the second parameter must be an integer");
+                else if (!Int32.TryParse(fragments[2], out curPieceCol)) throw new Exception($"{WrongParameter}: the second parameter must be an integer");
                 // input coord starts from 1, but array starts from 0
-                row -= 1; col -= 1;
+                curPieceRow -= 1; curPieceCol -= 1;
                 // if the coordinate is not valid for the board
-                if (!Board.IsValidCoord(row, col)) throw new Exception($"{WrongParameter}: the row or column is out of board");
+                if (!Board.IsValidCoord(curPieceRow, curPieceCol)) throw new Exception($"{WrongParameter}: the row or column is out of board");
                 // if the place has piece already
-                else if (Board.Cells[row][col] != null) throw new Exception(ExistingPiece);
-                sign = fragments[3];
+                else if (Board.Cells[curPieceRow][curPieceCol] != null) throw new Exception(ExistingPiece);
+                curPieceSign = fragments[3];
             }
             return flag;
         }
