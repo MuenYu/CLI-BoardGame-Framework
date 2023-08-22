@@ -20,17 +20,15 @@ namespace Game
 
         public void RunManager()
         {
-            Console.WriteLine("Welcome");
-            Console.WriteLine("How to interact with the system: ");
-            Console.WriteLine("1. Pressing arrow key to move the cursor.");
-            Console.WriteLine("2. Pressing enter to select the option.");
-            Console.WriteLine("3. If no shown option, inputting a command and then press enter to confirm.");
-
-
-            Console.WriteLine();
-
             while (true)
             {
+                Console.WriteLine("Welcome");
+                Console.WriteLine("How to interact with the system: ");
+                Console.WriteLine("1. Pressing arrow key to move the cursor.");
+                Console.WriteLine("2. Pressing enter to select the option.");
+                Console.WriteLine("3. If no shown option, inputting a command and then press enter to confirm.");
+
+                Console.WriteLine();
                 string gameName = SelectGame();
                 if (gameName == "quit")
                 {

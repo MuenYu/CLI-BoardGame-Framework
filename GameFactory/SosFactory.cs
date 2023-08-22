@@ -67,8 +67,8 @@ namespace Game
             List<string> options = new List<string>()
             {
                 "Human vs Human",
-                "Human vs Computer",
-                "Computer vs Human",
+                "Human vs Computer (Human First)",
+                "Computer vs Human (Computer First)",
             };
             string choice = Prompt.Select("Choose the mode you want to play", options, defaultValue: options[0]);
             int index = options.IndexOf(choice);
