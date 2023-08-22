@@ -19,14 +19,13 @@ namespace Game
 
         public override Game LoadGame()
         {
-            SosGame g = null;
+            Game g = base.LoadGame();
+            if (g is not SosGame) throw new Exception("the game file is not SOS game");
+            SosGame sg = (SosGame)g;
             GameSaver gs = InitGameSaver();
             HistoryManager hm = InitHistoryManager();
             HelpSystem hs = InitHelpSystem();
-            string path = Prompt.Input<string>("Please enter the path of game saving file");
-            string json = IOUtil.ReadFromFile(path);
-            g = SerUtil.ToObj<SosGame>(json);
-            return new SosGame(g.Board,g.Players,g.CurPlayer,hs,hm,gs,g.Scores);
+            return new SosGame(sg.Board,sg.Players,sg.CurPlayer,hs,hm,gs,sg.Scores);
         }
 
         protected override Board InitBoard()
@@ -37,7 +36,7 @@ namespace Game
             int size = Prompt.Input<int>("What's the size of the board? (input an integer between 3-20)");
             size = size < MinSize ? MinSize : size; // 3 * 3 at least
             size = size > MaxSize ? MaxSize : size; // the maximum size of the board is 20
-            return new RegularBoard(size,size);
+            return new RectBoard(size,size);
         }
 
         protected override GameSaver InitGameSaver()

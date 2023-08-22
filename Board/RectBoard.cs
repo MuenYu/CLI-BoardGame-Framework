@@ -3,12 +3,12 @@
 
 namespace Game
 {
-    class RegularBoard : Board
+    class RectBoard : Board
     {
         [JsonConstructor]
-        public RegularBoard(Piece[][] cells) :base(cells){ }
+        public RectBoard(Piece[][] cells) :base(cells){ }
 
-        public RegularBoard(int x, int y)
+        public RectBoard(int x, int y)
         {
             x = x > 0 ? x : 1;
             y = y > 0 ? y : 1;
