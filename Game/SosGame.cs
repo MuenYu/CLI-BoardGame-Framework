@@ -47,7 +47,7 @@
         // return bool: 
         // true: continue this round
         // false: go to next round
-        public override bool CheckAndExeCmd(string cmd)
+        public override bool ExecuteCmd(string cmd)
         {
             if (!CheckAndParseCmd(cmd)) return false;
             // put the piece on the board

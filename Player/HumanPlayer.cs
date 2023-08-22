@@ -12,7 +12,7 @@ namespace Game
             g.Board.ShowBoard();
             // get user input
             string cmd = Prompt.Input<string>(this.name);
-            return g.CheckAndExeCmd(cmd);
+            return g.ExecuteCmd(cmd);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Game
         // if the command is not correct, just throw exception
         // if the round continue, return true
         // if not, return false
-        public abstract bool CheckAndExeCmd(string cmd);
+        public abstract bool ExecuteCmd(string cmd);
 
         public abstract List<string> CalculateLegalMoves();
 
