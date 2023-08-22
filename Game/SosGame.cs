@@ -171,8 +171,8 @@
         }
         protected override void CheckWinner()
         {
-            Console.WriteLine($"{Players[0].Name} connects {scores[0]} SOS");
-            Console.WriteLine($"{Players[1].Name} connects {scores[1]} SOS");
+            Console.WriteLine($"{Players[0].Name} connected {scores[0]} SOS");
+            Console.WriteLine($"{Players[1].Name} connected {scores[1]} SOS");
 
             if (scores[0] > scores[1])
                 Console.WriteLine($"The winner is {Players[0].Name}");
