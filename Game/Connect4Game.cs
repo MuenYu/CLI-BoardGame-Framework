@@ -179,7 +179,7 @@ namespace Game
             if(CheckChain())
                 return true;
 
-            /*for (int i = 0; i < Board.Cells.Length; ++i)
+            for (int i = 0; i < Board.Cells.Length; ++i)
             {
                 for (int j = 0; j < Board.Cells[i].Length; ++j)
                 {
@@ -189,8 +189,8 @@ namespace Game
                     }
                 }
             }
-            */
-            return false;
+            
+            return true;
         }
 
         protected override void CheckWinner()
