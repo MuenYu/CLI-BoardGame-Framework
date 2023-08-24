@@ -14,6 +14,7 @@ namespace Game
             gameFactoryList = new Dictionary<string, Func<GameFactory>>()
             {
                 {"sos", () => { return new SosFactory(); } },
+                {"connect4", () => { return new Connect4Factory(); } },
                 {"quit", () => { return null; } }
             };
         }
