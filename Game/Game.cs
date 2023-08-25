@@ -52,8 +52,6 @@ namespace Game
                 }catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    // TODO remove it after test
-                    Console.WriteLine(ex.StackTrace);
                 }
             }
         }
