@@ -1,10 +1,9 @@
-﻿
-
-namespace Game
+﻿namespace Game
 {
     internal class Connect4Game : Game
     {
-        const int ROW = 6, COLUMN = 7;        
+        int col;
+        const int ROW = 5, COLUMN = 6;        
         string[] symbol = new string[] { "O", "X" };
 
         public Connect4Game(Board board, Player[] players, int curPlayer, HelpSystem helpSystem, HistoryManager historyManager, GameSaver gameSaver)
@@ -17,13 +16,12 @@ namespace Game
         public override bool CheckAndExeCmd(string cmd)
         {
             if (!CheckAndParseCmd(cmd)) return false;
-            int columns = int.Parse(cmd.Substring(5)) - 1;
             // put the piece on the board
-            for (int rows = ROW - 1; rows >= 0; rows--)
+            for (int row = ROW; row >= 0; row--)
             {
-                if (Board.Cells[rows][columns] == null)
+                if (Board.Cells[row][col] == null)
                 {
-                    Board.Cells[rows][columns] = new Piece(symbol[curPlayer]);
+                    Board.Cells[row][col] = new Piece(symbol[curPlayer]);
                     return true;
                 }
                 
@@ -31,71 +29,50 @@ namespace Game
             return true;
         }
 
-        
-        /*
-        public override bool ExecuteCmd(string cmd)
+
+        protected override bool CheckAndParseCmd(string cmd)
         {
-            if (!CheckAndParseCmd(cmd)) return false;
+            const string FormatIssue = "wrong command format";
+            const string UnsupportedCmd = "unsupported command";
+            const string WrongParameter = "wrong Parameter";
+            const string ExistingPiece = "this column is full";
 
-            if (cmd.StartsWith("drop "))
+            bool flag = base.CheckAndParseCmd(cmd);
+            if (flag) // if need further check
             {
-                int column;
-                if (Int32.TryParse(cmd.Substring(5), out column))
-                {
-                    column--; // Adjust for 0-based indexing
-                    if (column >= 0 && column < board.Columns)
-                    {
-                        return DropPiece(column);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid column number.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid column number format.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Unsupported command.");
-            }
+                string[] fragments = cmd.Split(' ');
+                // command format is not correct
+                if (fragments.Length != 2) throw new Exception($"{FormatIssue}");
+                // the command is not 'drop'
+                else if (fragments[0] != "drop") throw new Exception(UnsupportedCmd);
+                
+                // if the second parameter is not integer
+                else if (!Int32.TryParse(fragments[1], out col)) throw new Exception($"{WrongParameter}: the first parameter must be an integer");
 
-            return true;
+                // input coord starts from 1, but array starts from 0
+                col = col - 1;
+                // if the coordinate is not valid for the board
+                if (col < 0 || COLUMN < col) throw new Exception($"{WrongParameter}: the row or column is out of board");
+                
+                // if the place has piece already
+                else if (Board.Cells[0][col] != null) throw new Exception(ExistingPiece);
+                
+            }
+            return flag;
         }
-        */
-
-        /*
-
-        private bool DropPiece(int column)
-        {
-            for (int row = Board.Cells.Length - 1; row >= 0; row--)
-            {
-                if (board.Cells[row][column] == null)
-                {
-                    board.Cells[row][column] = new Piece(players[curPlayer].Symbol);
-                    return CheckWinner(row, column);
-                }
-            }
-
-            Console.WriteLine("Column is full. Try a different column.");
-            return true; // Continue with the same player's turn
-        }
-        */
 
         public bool CheckChain()
         {
             int lastPlayer = (curPlayer + 1) % 2;
             // Check rows
-            for (int row = 0; row < 6; row++)
+            for (int rows = 0; rows < 6; rows++)
             {
-                for (int col = 0; col < 4; col++)
+                for (int cols = 0; cols < 4; cols++)
                 {
-                    Piece piece1 = Board.Cells[row][col];
-                    Piece piece2 = Board.Cells[row][col + 1];
-                    Piece piece3 = Board.Cells[row][col + 2];
-                    Piece piece4 = Board.Cells[row][col + 3];
+                    Piece piece1 = Board.Cells[rows][cols];
+                    Piece piece2 = Board.Cells[rows][cols + 1];
+                    Piece piece3 = Board.Cells[rows][cols + 2];
+                    Piece piece4 = Board.Cells[rows][cols + 3];
 
                     if (piece1 != null && piece2 != null && piece3 != null && piece4 != null)
                     {
@@ -110,14 +87,14 @@ namespace Game
 
 
             // Check columns
-            for (int row = 0; row < 3; row++)
+            for (int rows = 0; rows < 3; rows++)
             {
-                for (int col = 0; col < 7; col++)
+                for (int cols = 0; cols < 7; cols++)
                 {
-                    Piece piece1 = Board.Cells[row][col];
-                    Piece piece2 = Board.Cells[row + 1][col];
-                    Piece piece3 = Board.Cells[row + 2][col];
-                    Piece piece4 = Board.Cells[row + 3][col];
+                    Piece piece1 = Board.Cells[rows][cols];
+                    Piece piece2 = Board.Cells[rows + 1][cols];
+                    Piece piece3 = Board.Cells[rows + 2][cols];
+                    Piece piece4 = Board.Cells[rows + 3][cols];
                     if (piece1 != null && piece2 != null && piece3 != null && piece4 != null)
                     {
                         if (piece1.Sign == symbol[lastPlayer] && piece2.Sign == symbol[lastPlayer] &&
@@ -130,18 +107,18 @@ namespace Game
             }
 
             // Check diagonals
-            for (int row = 0; row < 3; row++)
+            for (int rows = 0; rows < 3; rows++)
             {
-                for (int col = 0; col < 4; col++)
+                for (int cols = 0; cols < 4; cols++)
                 {
-                    Piece piece1 = Board.Cells[row][col];
-                    Piece piece2 = Board.Cells[row + 1][col + 1];
-                    Piece piece3 = Board.Cells[row + 2][col + 2];
-                    Piece piece4 = Board.Cells[row + 3][col + 3];
-                    Piece piece5 = Board.Cells[row][col + 3];
-                    Piece piece6 = Board.Cells[row + 1][col + 2];
-                    Piece piece7 = Board.Cells[row + 2][col + 1];
-                    Piece piece8 = Board.Cells[row + 3][col];
+                    Piece piece1 = Board.Cells[rows][cols];
+                    Piece piece2 = Board.Cells[rows + 1][cols + 1];
+                    Piece piece3 = Board.Cells[rows + 2][cols + 2];
+                    Piece piece4 = Board.Cells[rows + 3][cols];
+                    Piece piece5 = Board.Cells[rows][cols + 3];
+                    Piece piece6 = Board.Cells[rows + 1][cols + 2];
+                    Piece piece7 = Board.Cells[rows + 2][cols + 1];
+                    Piece piece8 = Board.Cells[rows + 3][cols];
                     if (piece1 != null && piece2 != null && piece3 != null && piece4 != null)
                     {
                         if (piece1.Sign == symbol[lastPlayer] && piece2.Sign == symbol[lastPlayer] &&
@@ -167,9 +144,9 @@ namespace Game
         public override List<string> CalculateLegalMoves()
         {
             List<string> legalMoves = new List<string>();
-            for (int column = 0; column < COLUMN; ++column)
+            for (int i = 0; i <= COLUMN; ++i)
             {
-                legalMoves.Add($"drop {column + 1}");
+                legalMoves.Add($"drop {i + 1}");
             }
             return legalMoves;
         }
