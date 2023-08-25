@@ -27,6 +27,17 @@
             return g;
         }
 
+        protected override Game Redo()
+        {
+            Game g = base.Redo();
+            if(g is SosGame)
+            {
+                SosGame sos = (SosGame)g;
+                scores = sos.scores;
+            }
+            return g;
+        }
+
         public override List<string> CalculateLegalMoves()
         {
             List<string> legalMoves = new List<string>();

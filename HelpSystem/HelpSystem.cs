@@ -15,6 +15,7 @@ namespace Game
             this.helps = new List<string>()
             {
                 "undo: go back to your last turn, this command has no parameter",
+                "redo: undo of undo, this command has no parameter",
                 "save: save current game state to a file, this command has no parameter",
                 "help: print this help message, this command has no parameter",
                 "quit: quit the game, this command has no parameter",

@@ -27,7 +27,14 @@ namespace Game
 
         protected virtual Game Undo()
         {
-            Game g = historyManager.Recover();
+            Game g = historyManager.Undo();
+            board = g.Board;
+            return g;
+        }
+
+        protected virtual Game Redo()
+        {
+            Game g = historyManager.Redo();
             board = g.Board;
             return g;
         }
@@ -47,11 +54,14 @@ namespace Game
                         break;
                     }
                     if (!Players[CurPlayer].TakeMove(this)) continue;
+                    historyManager.EmptyUndoStack();
                     historyManager.SnapShot(this);
                     curPlayer = (CurPlayer + 1) % Players.Length;
                 }catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    // TODO remove it before submitting
+                    //Console.WriteLine(ex.StackTrace);
                 }
             }
         }
@@ -72,6 +82,10 @@ namespace Game
                     return false;
                 case "undo":
                     Undo();
+                    return false;
+                case "redo":
+                    // TODO redo implementation
+                    Redo();
                     return false;
                 case "save":
                     gameSaver.Save(this);
