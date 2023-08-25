@@ -30,7 +30,7 @@ namespace Game
 
         protected override Board InitBoard()
         {
-            return new RectBoard(7, 6);
+            return new RectBoard(6, 7);
         }
 
         protected override GameSaver InitGameSaver()

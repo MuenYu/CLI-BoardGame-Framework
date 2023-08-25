@@ -8,14 +8,14 @@ namespace Game
         [JsonConstructor]
         public RectBoard(Piece[][] cells) :base(cells){ }
 
-        public RectBoard(int x, int y)
+        public RectBoard(int row, int col)
         {
-            x = x > 0 ? x : 1;
-            y = y > 0 ? y : 1;
-            this.cells = new Piece[y][];
+            row = row > 0 ? row : 1;
+            col = col > 0 ? col : 1;
+            this.cells = new Piece[row][];
             for (int i = 0; i < this.cells.Length; ++i)
             {
-                this.cells[i] = new Piece[x];
+                this.cells[i] = new Piece[col];
             }
         }
 
