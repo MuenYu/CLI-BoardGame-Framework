@@ -18,13 +18,12 @@ namespace Game
 
         public override Game LoadGame()
         {
-            Connect4Game g = null;
+
+            Game g = base.LoadGame();
+            if (g is not Connect4Game) throw new Exception("the game file is not Connect4 game");
             GameSaver gs = InitGameSaver();
             HistoryManager hm = InitHistoryManager();
             HelpSystem hs = InitHelpSystem();
-            string path = Prompt.Input<string>("Please enter the path of game saving file");
-            string json = IOUtil.ReadFromFile(path);
-            g = SerUtil.ToObj<Connect4Game>(json);
             return new Connect4Game(g.Board, g.Players, g.CurPlayer, hs, hm, gs);
         }
 
